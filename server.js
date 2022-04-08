@@ -1,8 +1,15 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const { nextTick } = require('process');
+const logEvents = require('./middleware/logEvents');
 const PORT = process.env.PORT || 3500;
+
+//custom middleware
+app.use((req, res, next) => {
+    logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, 'reqlog.txt');
+    console.log(`${req.method} ${req.path}`);
+    next;
+})
 
 //built in middleware to handle urlencoded data
 //in other words, form data:
